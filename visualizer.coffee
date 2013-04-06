@@ -1,7 +1,9 @@
-px = (pos) -> "#{pos}px"
+PI = Math.PI
+TWO_PI = Math.PI * 2
+HALF_PI = Math.PI / 2
 
 class Dot
-	constructor: (@radius, @center, rate = 5, container=null, @angle=Math.PI / 2) ->
+	constructor: (@radius, @center, rate = 5, container=null, @angle=HALF_PI) ->
 		@div = $ '<div class="dot">'
 		@setPosition()
 		@div.appendTo container
@@ -16,12 +18,28 @@ class Dot
 	setPosition: ->
 		@calculatePosition()
 		@div.css
-			left: px @x
-			top: px @y
+			left: @px @x
+			top: @px @y
 
 	stepForward: ->
 		@angle += @angleIncrement
 		@setPosition()
+		if @crossedOrigin()
+			@updateColor()
+			@playSound()
+
+	crossedOrigin: ->
+		if @angle > TWO_PI
+			@angle -= TWO_PI
+			return true
+		false
+
+	updateColor: ->
+
+	playSound: ->
+
+	px: (pos) ->
+		"#{pos}px"
 
 $ ->
 	body = $ document.body
