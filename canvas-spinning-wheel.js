@@ -17,7 +17,7 @@
       this.radius = radius;
       this.center = center;
       this.angle = angle != null ? angle : HALF_PI;
-      this.rate = rate != null ? rate : .2;
+      this.rate = rate != null ? rate : MOZIAC_RATE;
       this.START_ANGLE = this.angle;
       this.circumference = TWO_PI * this.radius;
       this.centerY = this.center.y;
@@ -71,14 +71,11 @@
       color = "rgb(" + this.color.red + ", " + this.color.green + ", " + (Math.floor(this.color.blue)) + ")";
       graphics.beginPath();
       graphics.fillStyle = color;
-      graphics.strokeStyle = color;
-      graphics.arc(this.x, this.y, 3, 0, TWO_PI, false);
+      graphics.arc(this.x, this.y, 10, 0, TWO_PI, false);
       graphics.fill();
       graphics.stroke();
       return graphics.closePath();
     };
-
-    SoundDot.prototype.playSound = function() {};
 
     return SoundDot;
 
@@ -92,21 +89,17 @@
     }
 
     World.prototype.initialize = function() {
-      var center, i, radius, _i, _results;
+      var center, dotCount, i, radius, _i, _results;
 
+      dotCount = .5 * Math.min(this.width, this.height) / 20;
       center = {
         x: this.width / 2,
         y: this.height / 2
       };
       _results = [];
-      for (i = _i = 1; _i <= 100; i = ++_i) {
-        radius = 5 * i;
-        this.dots.push(new SoundDot(radius, center, 0));
-        this.dots.push(new SoundDot(radius, center, TWO_PI / 3));
-        this.dots.push(new SoundDot(radius, center, TWO_PI / 3 * 2));
-        this.dots.push(new SoundDot(radius, center, 0 + TWO_PI / 6));
-        this.dots.push(new SoundDot(radius, center, TWO_PI / 3 + TWO_PI / 6));
-        _results.push(this.dots.push(new SoundDot(radius, center, TWO_PI / 3 * 2 + TWO_PI / 6)));
+      for (i = _i = 1; 1 <= dotCount ? _i <= dotCount : _i >= dotCount; i = 1 <= dotCount ? ++_i : --_i) {
+        radius = 20 * i;
+        _results.push(this.dots.push(new SoundDot(radius, center, 0)));
       }
       return _results;
     };
@@ -167,7 +160,6 @@
       ellapsedTime = currentTime - prevTime;
       prevTime = currentTime;
       world.update(ellapsedTime);
-      clearContext(context);
       return world.render(context);
     };
     return window.setInterval(update, 33);

@@ -6,7 +6,7 @@ THREEHALVES_PI = 3 * Math.PI / 2
 MOZIAC_RATE = .614
 
 class SoundDot
-	constructor: (@radius, @center, @angle=HALF_PI, @rate=.2) ->
+	constructor: (@radius, @center, @angle=HALF_PI, @rate=MOZIAC_RATE) ->
 		@START_ANGLE = @angle
 		@circumference = TWO_PI * @radius
 		@centerY = @center.y
@@ -47,17 +47,12 @@ class SoundDot
 
 	render: (graphics) ->
 		color = "rgb(#{@color.red}, #{@color.green}, #{Math.floor(@color.blue)})"
-
 		graphics.beginPath()
 		graphics.fillStyle = color
-		# graphics.fillStyle = "#ffffff"
-		graphics.strokeStyle = color
-		graphics.arc @x, @y, 3, 0, TWO_PI, false
+		graphics.arc @x, @y, 10, 0, TWO_PI, false
 		graphics.fill()
 		graphics.stroke()
 		graphics.closePath()
-
-	playSound: ->
 
 
 class World
@@ -65,20 +60,13 @@ class World
 		@dots = []
 
 	initialize: ->
+		dotCount = .5 * Math.min(@width, @height) / 20
 		center =
 			x: @width / 2
 			y: @height / 2
-
-		for i in [1..100]
-			radius = 5 * i
+		for i in [1..dotCount]
+			radius = 20 * i
 			@dots.push new SoundDot radius, center, 0
-			@dots.push new SoundDot radius, center, TWO_PI / 3
-			@dots.push new SoundDot radius, center, TWO_PI / 3 * 2
-			@dots.push new SoundDot radius, center, 0 + TWO_PI / 6
-			@dots.push new SoundDot radius, center, TWO_PI / 3 + TWO_PI / 6
-			@dots.push new SoundDot radius, center, TWO_PI / 3 * 2 + TWO_PI / 6
-
-			# @dots.push new SoundDot radius, center, THREEHALVES_PI
 
 	update: (ellapsedTime) ->
 		dot.update(ellapsedTime) for dot in @dots
@@ -113,7 +101,7 @@ $ ->
 		prevTime = currentTime
 
 		world.update ellapsedTime
-		clearContext context
+		# clearContext context
 		world.render context
 
 	window.setInterval update, 33
